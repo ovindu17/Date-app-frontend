@@ -44,6 +44,7 @@ const Messages = () => {
   const [showOtherUsers, setShowOtherUsers] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [socket, setSocket] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const token = localStorage.getItem('token');
 
@@ -92,6 +93,15 @@ const Messages = () => {
     return () => {
       newSocket.close();
     };
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const fetchChatUsers = async () => {
@@ -198,28 +208,30 @@ const Messages = () => {
           <FontAwesomeIcon icon={faUser} />
         </div>
       </nav>
-      <div className="messages-container">
-        <div className="chat-sidebar">
-          <div className="chat-header">
-            <h2>Messages</h2>
-            <button className="new-chat-button" onClick={handleStartNewChat}>
-              Start New Chat
-            </button>
+      <div className={`messages-container ${isMobile && selectedUser ? 'mobile-chat-active' : ''}`}>
+        {(!isMobile || !selectedUser) && (
+          <div className="chat-sidebar">
+            <div className="chat-header">
+              <h2>Messages</h2>
+              <button className="new-chat-button" onClick={handleStartNewChat}>
+                Start New Chat
+              </button>
+            </div>
+            <div className="user-list">
+              {chatUsers.map(user => (
+                <div 
+                  key={user._id} 
+                  className={`user-item ${selectedUser?._id === user._id ? 'selected' : ''}`}
+                  onClick={() => setSelectedUser(user)}
+                >
+                  <span className="username">{user.username}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="user-list">
-            {chatUsers.map(user => (
-              <div 
-                key={user._id} 
-                className={`user-item ${selectedUser?._id === user._id ? 'selected' : ''}`}
-                onClick={() => setSelectedUser(user)}
-              >
-                <span className="username">{user.username}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        )}
 
-        {selectedUser ? (
+        {selectedUser && (
           <div className="chat-container">
             <div className="chat-header">
               <h3>Chat with {selectedUser.username}</h3>
@@ -245,10 +257,6 @@ const Messages = () => {
               />
               <button type="submit">Send</button>
             </form>
-          </div>
-        ) : (
-          <div className="no-chat-selected">
-            <p>Select a chat to start messaging</p>
           </div>
         )}
 
