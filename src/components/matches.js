@@ -19,7 +19,7 @@ const Matches = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
-      const response = await axios.get('http://localhost:3000/api/users/all-users', {
+      const response = await axios.get('https://backend-lyqe.onrender.com/api/users/all-users', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

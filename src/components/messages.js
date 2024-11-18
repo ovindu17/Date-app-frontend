@@ -70,7 +70,7 @@ const Messages = () => {
   };
 
   useEffect(() => {
-    const newSocket = io('http://localhost:3000');
+    const newSocket = io('https://backend-lyqe.onrender.com');
     setSocket(newSocket);
 
     const userId = getCurrentUserId();
@@ -96,13 +96,13 @@ const Messages = () => {
 
   const fetchChatUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/messages/chat-users', {
+      const response = await axios.get('https://backend-lyqe.onrender.com/api/messages/chat-users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       const chatUserIds = response.data;
       console.log('Chat user IDs:', chatUserIds);
       
-      const usersResponse = await axios.get('http://localhost:3000/api/users/all-users', {
+      const usersResponse = await axios.get('https://backend-lyqe.onrender.com/api/users/all-users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -125,7 +125,7 @@ const Messages = () => {
 
   const fetchMessages = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/messages/${selectedUser._id}`, {
+      const response = await axios.get(`https://backend-lyqe.onrender.com/api/messages/${selectedUser._id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessages(response.data);
@@ -140,7 +140,7 @@ const Messages = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/messages/send',
+        'https://backend-lyqe.onrender.com/api/messages/send',
         {
           recipientId: selectedUser._id,
           content: newMessage.trim()

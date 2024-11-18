@@ -38,7 +38,7 @@ function EditProfile() {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      await axios.put('http://localhost:3000/api/users/profile', formData, {
+      await axios.put('https://backend-lyqe.onrender.com/api/users/profile', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
