@@ -30,6 +30,24 @@ const Matches = () => {
     }
   };
 
+  
+  const getUsers = async (userIds) => {
+    try {
+      const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
+      const response = await axios.post('https://backend-lyqe.onrender.com/api/users/get-users-by-ids', 
+        { userIds },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching selected users:', error.response?.data || error.message);
+    }
+  };
+
   const handleLike = async (userId) => {
     try {
       // Add like to backend
